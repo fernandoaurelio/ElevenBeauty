@@ -3,7 +3,7 @@
 Sistema desenvolvido para o **Miss & Mister Cabeleireiros**, criado para otimizar a gestão financeira, organizar serviços e integrar estratégias de marketing, incluindo o **Método Biondo**.
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=react,vite,bootstrap,mysql,html,css,js" />
+  <img src="https://skillicons.dev/icons?i=react,vite,tailwind,mysql,html,css,js" />
 </p>
 
 ---
