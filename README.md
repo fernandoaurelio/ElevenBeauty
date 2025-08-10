@@ -15,14 +15,14 @@ Sistema desenvolvido para o **Miss & Mister Cabeleireiros**, criado para otimiza
 - 📅 **Agenda e Calendário de Conteúdo** para marketing no Instagram
 - 💇‍♀️ Serviços cadastrados: mechas, esmaltação em gel, corte feminino, coloração de raiz, tratamentos capilares
 - 💎 **Método Biondo**: protocolo exclusivo de mechas integrado ao sistema
-- 📱 Layout responsivo com **Bootstrap**
+- 📱 Layout responsivo com **Tailwind CSS**
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
 - **React + Vite** → Estrutura e renderização SPA
-- **Bootstrap 5** → Layout moderno e responsivo
+- **Tailwind CSS** → Layout moderno e responsivo
 - **MySQL** → Banco de dados relacional para armazenamento seguro
 - **HTML5 / CSS3 / JavaScript** → Estrutura e estilização base
 - **Axios** → Comunicação entre frontend e backend
