@@ -68,7 +68,7 @@ function ContasAPagar() {
 						<tbody className="text-slate-800 divide-y divide-slate-200">
 							{dados.map((conta, index) => (
 								<tr key={index} className="hover:cursor-pointer hover:bg-slate-300">
-									<td className="px-4 py-2">{new Date(conta.vencimento).toLocaleDateString()}</td>
+									<td className="px-4 py-2">{new Date(conta.data).toLocaleDateString()}</td>
 									<td className="px-4 py-2">{conta.fornecedor}</td>
 									<td className="px-4 py-2">R$ {parseFloat(conta.valor).toFixed(2)}</td>
 									<td className="px-4 py-2">{conta.parcela_atual}/{conta.total_parcelas}</td>

@@ -17,36 +17,38 @@ const pool = mysql.createPool({
 });
 
 app.get('/contas-pagar', (req, res) => {
-  const { filtro } = req.query;
+    const { filtro } = req.query;
 
-  let query = 'SELECT * FROM contas_pagar WHERE status = "Aberto"'; // só em aberto
-  let params = [];
+    let query = "SELECT id, descricao, valor, data, fornecedor, status, tipo, CASE WHEN descricao LIKE '%(Parcela %/%' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(descricao, ' (Parcela ', -1), '/', 1) ELSE '1' END AS parcela_atual, CASE WHEN descricao LIKE '%(Parcela %/%' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(descricao, '/', -1), ')', 1) ELSE '1' END AS total_parcelas FROM fluxo_caixa WHERE status = 'Aberto' AND tipo = 'Saida'";
 
-  const hoje = new Date();
+    let params = [];
+    const hoje = new Date();
 
-  if (filtro === 'dia') {
-    query += ' AND DATE(vencimento) = CURDATE()';
-  } else if (filtro === 'mes') {
-    query += ' AND MONTH(vencimento) = ? AND YEAR(vencimento) = ?';
-    params.push(hoje.getMonth() + 1, hoje.getFullYear());
-  } else if (filtro === 'ano') {
-    query += ' AND YEAR(vencimento) = ?';
-    params.push(hoje.getFullYear());
-  }
-
-  pool.query(query, params, (err, result) => {
-    if (err) {
-      console.error('Erro ao buscar dados:', err);
-      return res.status(500).json({ erro: 'Erro ao buscar no banco', detalhes: err });
+    if (filtro === 'dia') {
+        query += ' AND DATE(data) = CURDATE()';
+    } else if (filtro === 'mes') {
+        query += ' AND MONTH(data) = ? AND YEAR(data) = ?';
+        params.push(hoje.getMonth() + 1, hoje.getFullYear());
+    } else if (filtro === 'ano') {
+        query += ' AND YEAR(data) = ?';
+        params.push(hoje.getFullYear());
     }
-    return res.json(result);
-  });
+
+    query += ' ORDER BY data ASC';
+
+    pool.query(query, params, (err, result) => {
+        if (err) {
+            console.error('Erro ao buscar dados com parcelas:', err);
+            return res.status(500).json({ erro: 'Erro ao buscar no banco', detalhes: err });
+        }
+        return res.json(result);
+    });
 });
 
 app.get('/fluxo', (req, res) => {
   const { inicio, fim, descricao, valor, forma_pagamento, tipo } = req.query;
 
-  let sql = 'SELECT * FROM fluxo_caixa WHERE 1=1 ORDER BY id DESC';
+  let sql = 'SELECT * FROM fluxo_caixa WHERE status="Pago" ORDER BY id DESC';
   const params = [];
 
   if (inicio && fim) {
@@ -80,14 +82,14 @@ app.get('/fluxo', (req, res) => {
 }); // ← esse fecha o app.get
 
 app.post('/AddFluxo', (req, res) => {
-  const { data, descricao, valor, forma_pagamento, tipo } = req.body;
+  const { data, descricao, valor, forma_pagamento, tipo,status } = req.body;
 
   if (!data || !descricao || !valor || !forma_pagamento || !tipo) {
     return res.status(400).json({ error: "Todos os campos são obrigatórios" });
   }
 
-  const sql = "INSERT INTO `fluxo_caixa`(`data`, `descricao`, `valor`, `forma_pagamento`, `tipo`) VALUES (?,?,?,?,?)";
-  const params = [data, descricao, valor, forma_pagamento, tipo]; // ✅ Agora o params existe
+  const sql = "INSERT INTO `fluxo_caixa`(`data`, `descricao`, `valor`, `forma_pagamento`, `tipo`, `status`) VALUES (?,?,?,?,?,?)";
+  const params = [data, descricao, valor, forma_pagamento, tipo,status]; // ✅ Agora o params existe
 
   pool.query(sql, params, (err, result) => {
     if (err) {
