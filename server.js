@@ -89,7 +89,7 @@ app.post('/AddFluxo', (req, res) => {
   }
 
   const sql = "INSERT INTO `fluxo_caixa`(`data`, `descricao`, `valor`, `forma_pagamento`, `tipo`, `status`) VALUES (?,?,?,?,?,?)";
-  const params = [data, descricao, valor, forma_pagamento, tipo,status]; // ✅ Agora o params existe
+  const params = [data, descricao, valor, forma_pagamento, tipo,status]; 
 
   pool.query(sql, params, (err, result) => {
     if (err) {
